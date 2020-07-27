@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "JBACodeChallenge": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\James\\source\\repos\\JBACodeChallenge\\JBACodeChallenge\\files\\JBATestDatabase.db C:\\Users\\James\\source\\repos\\JBACodeChallenge\\JBACodeChallenge\\files\\JBATestFile.pre"
+    }
+  }
+}
