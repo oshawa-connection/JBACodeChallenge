@@ -115,8 +115,14 @@ namespace TestsJBACodeInterview.Utilities
             Assert.AreEqual(expectedFirstRainfallModel.Date, actualFirstRainfallModel.Date);
             Assert.AreEqual(expectedFirstRainfallModel.Value, actualFirstRainfallModel.Value);
 
+            RainfallModel expectedLastRowFirstColumnRainfallModel = new RainfallModel() { guid = Guid.NewGuid(), Value = 3020, Xref = 1, Yref = 148, Date = new DateTime(2000, 1, 1) };
 
-
+            RainfallModel actualLastRowFirstColumnRainfallModel = rainfallModels[0, 9];
+            Assert.AreEqual(expectedLastRowFirstColumnRainfallModel.Xref, actualLastRowFirstColumnRainfallModel.Xref);
+            Assert.AreEqual(expectedLastRowFirstColumnRainfallModel.Yref, actualLastRowFirstColumnRainfallModel.Yref);
+            Assert.AreEqual(expectedLastRowFirstColumnRainfallModel.Value, actualLastRowFirstColumnRainfallModel.Value);
+            Assert.AreEqual(expectedLastRowFirstColumnRainfallModel.Date, actualLastRowFirstColumnRainfallModel.Date);
+            
 
 
         }
@@ -124,6 +130,7 @@ namespace TestsJBACodeInterview.Utilities
         /// <summary>
         /// The example data file provided
         /// however, it should also work if a header with a shorter year range (rows)
+        /// E.g. if the years were from 2000-2003, our 
         /// </summary>
         [TestMethod]
         public void testParseShorterYearRangePreDataBlock()
@@ -152,10 +159,14 @@ namespace TestsJBACodeInterview.Utilities
             preFileFormatReader.parseHeader(testingHeaderStringArray);
 
             int expectedNumberOfLinesPerBlock = 4;
-            Assert.AreEqual(expectedNumberOfLinesPerBlock, preFileFormatReader.numberOfLinesPerBlock);
+            Assert.AreEqual(expectedNumberOfLinesPerBlock, preFileFormatReader.numberOfLinesPerBlock,$"Expected ");
 
 
-            preFileFormatReader.parsePreDataBlock(gridRefs, blockDataShort);
+            RainfallModel[,] rainfallModels = preFileFormatReader.parsePreDataBlock(gridRefs, blockDataShort);
+
+            int expectedRainfallModelsLength = 4 * 12; // Just to show how I get the value. 4 rows, 12 months.
+
+            Assert.AreEqual(expectedRainfallModelsLength, rainfallModels.Length, $"There should be {expectedRainfallModelsLength} rainfall models but {rainfallModels.Length} were created.");
             
 
         }
