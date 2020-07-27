@@ -65,8 +65,8 @@ namespace TestsJBACodeInterview.Utilities
 
        
         /// <summary>
-        /// Tests that 
-        /// Mainly to make sure that future changes to this method do not change
+        /// Tests that data blocks are parsed correctly.
+        /// Mainly to make sure that future code changes to this method do not change
         /// important functionality.
         /// </summary>
         [TestMethod]

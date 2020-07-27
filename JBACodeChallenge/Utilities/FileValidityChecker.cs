@@ -18,7 +18,7 @@ namespace JBACodeInterview.Utilities
             {
                 throw new Exception("File not found");
             }
-            Console.WriteLine(Path.GetExtension(fileName));
+            
 
             string fileExtension = Path.GetExtension(fileName);
 

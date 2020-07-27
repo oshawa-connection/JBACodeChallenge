@@ -6,25 +6,21 @@ namespace JBACodeChallenge.Models
 {
     public class JBADatabaseContext : DbContext
     {
-        public DbSet<RainfallModel> RainfallMeasurementModels { get; set; }
-
-                /// <summary>
-        /// Checks if database filepath is valid.
-        /// </summary>
-        /// <returns></returns>
-        private bool IsValid(string connectionString)
+        private string databaseConnectionString;
+        public JBADatabaseContext(string databaseConnectionString)
         {
-            return true;
+            this.databaseConnectionString = databaseConnectionString;
         }
+        public DbSet<RainfallModel> RainfallMeasurementModels { get; set; }
 
         /// <summary>
         /// Used if you want to change and encrypt the SQLite database.
         /// </summary>
         /// <returns></returns>
-        private static string BuildConnectionString()
+        private string BuildConnectionString()
         {
             SqliteConnectionStringBuilder sqliteConnectionStringBuilder = new SqliteConnectionStringBuilder();
-            sqliteConnectionStringBuilder.DataSource = @"C:\Users\James\source\repos\JBACodeChallenge\JBACodeChallenge\files\JBATestDatabase.db";
+            sqliteConnectionStringBuilder.DataSource = this.databaseConnectionString;
             Console.WriteLine(sqliteConnectionStringBuilder.ToString());
             return sqliteConnectionStringBuilder.ToString();
 
@@ -36,7 +32,6 @@ namespace JBACodeChallenge.Models
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             string connectionString = BuildConnectionString();
-            if (!this.IsValid(connectionString)) throw new Exception("Database path not valid");
             options.UseSqlite(connectionString);
         }
     }

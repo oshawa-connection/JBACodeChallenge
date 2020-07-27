@@ -5,6 +5,7 @@ using JBACodeChallenge.Models;
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using JBACodeInterview.Utilities;
 
 namespace JBACodeChallenge
 {
@@ -18,10 +19,13 @@ namespace JBACodeChallenge
                     $"Expected {2} but got {args.Length}");
             }
 
+            FileValidityChecker fileValidityChecker = new FileValidityChecker();
+
             string databasePath = args[0];
             string preFilePath = args[1];
 
-            // What if Years=1991-2000 changes? Array size.
+            fileValidityChecker.checkDatabaseFileValidity(databasePath);
+            fileValidityChecker.checkPreFileValidity(preFilePath);
 
             // Build dependent classes
             PreFileFormatReader preFileFormatReader = new PreFileFormatReader();
@@ -32,24 +36,22 @@ namespace JBACodeChallenge
             string blockHeader = String.Empty;
             string[] blockData;
             string[] headerText = new string[preFileFormatReader.numberOfHeaderLines];
-            var watch = new System.Diagnostics.Stopwatch();
-            watch.Start();
-            using (var db = new JBADatabaseContext())
+
+
+            using (var db = new JBADatabaseContext(databasePath))
             {
                 db.Database.EnsureCreated();
             }
 
-            
-            
 
-            using (var db = new JBADatabaseContext())
+            using (var db = new JBADatabaseContext(databasePath))
             using (var transaction = db.Database.BeginTransaction())
             using (StreamReader streamReader = new StreamReader(preFilePath))
             {
                 try
                 {
-                    //db.Database.EnsureCreated(); //creates if not found.
-                    Console.WriteLine("Database created");
+                    
+                    
                     // Read in header info
                     for (int i = 0; i < preFileFormatReader.numberOfHeaderLines; i++)
                     {
@@ -86,6 +88,8 @@ namespace JBACodeChallenge
                 }
                 catch (Exception exception)
                 {
+                    Console.WriteLine("An exception occurred. No transactions will be written.");
+                    Console.WriteLine($"Exception: {exception.Message}");
                     //transaction.Rollback();
                     // Cancel all tasks.
                     throw exception; // rethrow
@@ -97,9 +101,7 @@ namespace JBACodeChallenge
 
             }
 
-            Console.WriteLine($"Sucessfully read {preFilePath} into {databasePath}. Press enter to exit.");
-            watch.Stop();
-            Console.WriteLine($"Execution time: {watch.ElapsedMilliseconds} ms");
+            Console.WriteLine($"Sucessfully read {preFilePath} into {databasePath}. Press enter to exit program.");
             Console.ReadLine();
 
         }

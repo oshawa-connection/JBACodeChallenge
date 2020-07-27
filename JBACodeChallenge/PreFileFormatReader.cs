@@ -38,9 +38,6 @@ namespace JBACodeChallenge
             }
             // I HATE regex. I'm guessing LINQ has string manipulation methods.
 
-            //the last line of the header contains the info we want.
-            Console.WriteLine(headerText[numberOfHeaderLines - 1]);
-
             string headerLine = headerText[numberOfHeaderLines - 1];
 
             string[] headerInfos = headerLine.Split("[");
@@ -66,7 +63,6 @@ namespace JBACodeChallenge
             //In case years are provided non-chronologicaly first.
             this.numberOfLinesPerBlock = Math.Abs((this.yearRange[1] - this.yearRange[0])) + 1; //inclusive
 
-            Console.WriteLine(this.yearRange);
             Console.WriteLine($"Reading {this.numberOfLinesPerBlock} lines per block.");
 
         }
