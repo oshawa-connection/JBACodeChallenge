@@ -9,17 +9,16 @@ namespace JBACodeChallenge
     {
         private int[] monthNumbers = new int[12] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
         public int numberOfLinesPerBlock; // difference between yearRange values.
-        public int numberOfHeaderLines;
-        //public int numberOfBlocks; //check number of read blocks is same as specified in the header
-        public int[] yearRange; // e.g. 1992, 2002
-        private int[] yearsArray;
-        private DateTime[,] dateTimeArray;
+        public int numberOfHeaderLines; // The number of lines at the top of the file dedicated to the header. Assume fixed.
+        public int[] yearRange; // An array of 2 integers representing the year range from the file header, e.g. 1992, 2002
+        private int[] yearsArray; //An array representing all years between the two years specified in yearRange.
+        private DateTime[,] dateTimeArray; // A 2d array representing the date associatted with each value in the data block.
 
 
         public PreFileFormatReader()
         {
-            numberOfHeaderLines = 5;
-            yearRange = new int[2]; // e.g. 1992, 2002
+            numberOfHeaderLines = 5; 
+            yearRange = new int[2]; 
         }
 
 
@@ -58,7 +57,7 @@ namespace JBACodeChallenge
             this.yearRange[1] = int.Parse(stringYears[1]);
 
             this.yearsArray = this.generateArrayOfYears(this.yearRange);
-            joinMonthsAndYears(this.yearsArray);
+            createMonthsAndYearsArray(this.yearsArray);
 
             //In case years are provided non-chronologicaly first.
             this.numberOfLinesPerBlock = Math.Abs((this.yearRange[1] - this.yearRange[0])) + 1; //inclusive
@@ -97,13 +96,14 @@ namespace JBACodeChallenge
 
 
         /// <summary>
-        /// SHOULD RETURN THE JOINED DATA
+        /// Parse a block of the pre data and uses it to create an array of RainfallModels.
+        /// It also uses dateTimeArray to add dates to the Models.
         /// </summary>
-        /// <param name="gridRefs">E.g. [1,148]</param>
-        /// <param name="blockData"></param>
+        /// <param name="gridRefs">An array of 2 integers representing the grid refs for the block E.g. [1,148]</param>
+        /// <param name="blockData">A string array representing the block of data.</param>
         public RainfallModel[,] parsePreDataBlock(int[] gridRefs, string[] blockData)
         {
-            //validate inputs
+            // validate inputs
             if (gridRefs.Length != 2)
             {
                 throw new Exception($"Incorrect number of gridRefs." +
@@ -116,11 +116,10 @@ namespace JBACodeChallenge
                     $"Expected {this.numberOfLinesPerBlock} but got {blockData.Length}");
             }
 
-            //Twelve months per year
-            int[,] blockDataParsed = new int[12, blockData.Length];
+            int[,] blockDataParsed = new int[12, blockData.Length]; // 12 Months per year
             RainfallModel[,] rainfallMeasurements = new RainfallModel[12, blockData.Length];
 
-            //Parse each block into a two dimensional array.
+            // Parse each block into a two dimensional array.
             // COmbine these two loops
             for (int yearIndex=0; yearIndex< blockData.Length; yearIndex++)
             {
@@ -145,16 +144,16 @@ namespace JBACodeChallenge
         }
 
 
-
-
         /// <summary>
         /// Given an array of two integers, generates a sorted array containing all
-        /// numbers in the range between the two, inclusive.
+        /// numbers in the range between the two, inclusive of the final year.
+        /// Potentially this could be moved to a another/ static class.
         /// </summary>
         /// <param name="yearRange">The range of years. e.g. [1991, 2000] to represent 1991 to 2000.</param>
         /// <returns>A sorted array of the numbers in the range between the two numbers, inclusive.</returns>
         private int[] generateArrayOfYears(int[] yearRange)
         {
+            //In case years are in reverse order, use Absolute value
             int numberOfYears = Math.Abs((yearRange[0] - yearRange[1])) + 1;
 
             int lowestYear = yearRange.Min();
@@ -170,9 +169,19 @@ namespace JBACodeChallenge
         }
 
         /// <summary>
-        /// Move to static class.
+        /// Given an array representing years, this function returns a 2d array of months and years. The day field will always be the first day of the month.
+        /// This is quite difficult to explain in words so here is a picture
+        /// e.g. joinMonthsAndYears([1995,1998]) -> [1995/01/01, 1995/02/01          ...        1995/12/01]
+        ///                                                  .              .
+        ///                                                  .                 .
+        ///                                                                       .
+        ///                                         [1998/01/01                 ...  1996/11/01,1996/12/01] 
+        /// Potentially this could be moved to a another/ static class.
+        /// Beware of American date formatting when it prints
+        /// TODO: Give this guy a better name
         /// </summary>
-        private void joinMonthsAndYears(int[] yearsArray)
+        /// <param name="yearsArray">An array of integers representing years.</param>
+        private void createMonthsAndYearsArray(int[] yearsArray)
         {
             int[] monthNumbers = new int[12] { 1, 2, 3, 4, 5 ,6,7,8,9,10,11,12};
             

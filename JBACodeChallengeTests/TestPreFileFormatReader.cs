@@ -36,8 +36,8 @@ namespace TestsJBACodeInterview.Utilities
             int expectednumberOfLinesPerBlock = 10;
             preFileFormatReader.parseHeader(testingHeaderStringArray);
 
-            CollectionAssert.AreEqual(expectedYearRange, preFileFormatReader.yearRange,"Year range read incorrectly");
-            Assert.AreEqual(expectednumberOfLinesPerBlock, preFileFormatReader.numberOfLinesPerBlock,"Number of lines (years) read incorrectly");
+            CollectionAssert.AreEqual(expectedYearRange, preFileFormatReader.yearRange,"Year range read incorrectly from header");
+            Assert.AreEqual(expectednumberOfLinesPerBlock, preFileFormatReader.numberOfLinesPerBlock,"Number of lines per block read incorrectly from header");
             
         }
 
@@ -128,9 +128,8 @@ namespace TestsJBACodeInterview.Utilities
         }
 
         /// <summary>
-        /// The example data file provided
-        /// however, it should also work if a header with a shorter year range (rows)
-        /// E.g. if the years were from 2000-2003, our 
+        /// Check works for variable year range (rows per block)
+        /// E.g. if the years were from 2000-2003, we should read 4 lines (rows) per block
         /// </summary>
         [TestMethod]
         public void testParseShorterYearRangePreDataBlock()

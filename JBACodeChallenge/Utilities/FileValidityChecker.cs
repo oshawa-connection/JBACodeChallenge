@@ -31,7 +31,7 @@ namespace JBACodeInterview.Utilities
 
         /// <summary>
         /// Checks specified folder of the database exists and if so,
-        /// that it has the correct extension.
+        /// that the file specified has the correct extension.
         /// </summary>
         /// <param name="databasePath">The path to the output database, including filename and extension</param>
         public void checkDatabaseFileValidity(string databasePath)
