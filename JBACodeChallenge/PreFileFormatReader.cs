@@ -171,11 +171,12 @@ namespace JBACodeChallenge
         /// <summary>
         /// Given an array representing years, this function returns a 2d array of months and years. The day field will always be the first day of the month.
         /// This is quite difficult to explain in words so here is a picture
-        /// e.g. joinMonthsAndYears([1995,1998]) -> [1995/01/01, 1995/02/01          ...        1995/12/01]
+        /// e.g. joinMonthsAndYears([1995,1996,1997,1998]) -> 
+        ///                                         [1995/01/01, 1995/02/01          ...        1995/12/01]
         ///                                                  .              .
         ///                                                  .                 .
         ///                                                                       .
-        ///                                         [1998/01/01                 ...  1996/11/01,1996/12/01] 
+        ///                                         [1998/01/01                 ...  1998/11/01,1998/12/01] 
         /// Potentially this could be moved to a another/ static class.
         /// Beware of American date formatting when it prints
         /// TODO: Give this guy a better name

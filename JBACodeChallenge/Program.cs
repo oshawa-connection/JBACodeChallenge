@@ -31,7 +31,6 @@ namespace JBACodeChallenge
             // Build dependent classes
             PreFileFormatReader preFileFormatReader = new PreFileFormatReader();
 
-            List<Task> taskList = new List<Task>();
             int numberOfBlocksWritten = 0;
 
             // .pre files have a header with a fixed number of lines.
@@ -40,7 +39,8 @@ namespace JBACodeChallenge
             // .pre files are comprised of two parts: the block header and the block.
             // The "block" is a two dimensional array of integers. 
             // The blockHeader contains information unique to the succeding block.
-            string blockHeader = String.Empty; // e.g. grid-ref = 1, 138
+            // e.g.grid - ref = 1, 138
+            string blockHeader = String.Empty; 
             string[] blockData; // This stores the unparsed block data.
             
 
